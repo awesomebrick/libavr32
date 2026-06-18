@@ -38,17 +38,19 @@ static u8 size = HID_FRAME_MAX_BYTES;
 
 // set/unset dirty flag for given byte in frame
 static inline void hid_set_byte_flag(u8 byte, u8 val) {
-  if(val) {
-    dirty |= (1 << byte);
-  } else {
-    dirty &= ~(1 << byte);
+  if (byte<64) { //bytecount guard
+    if(val) {
+      dirty |= (1ULL << byte); //needs to be ULL. "1" is compiled as u32 int, so shifting > 32 is undefined
+    } else {
+      dirty &= ~(1ULL << byte);
+    }
   }
 }
 
 // test dirty flag for given byte in packet
 //u8 hid_get_byte_flag(u32 data, u8 byte) {
 u8 hid_get_byte_flag(u8 byte) {
-  return (dirty & (1 << byte)) > 0;
+  return (dirty & (1ULL << byte)) > 0;
 }
 
 // parse frame and spawn events
