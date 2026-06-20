@@ -221,7 +221,7 @@ static void uhi_hid_report_reception(
   UNUSED(ep);
 
   // inverted the logic here to ensure the pipe doesn't get killed on error
-  if ((status = UHD_TRANS_NOERROR) && (nb_transfered >= 4)) {
+  if ((status == UHD_TRANS_NOERROR) && (nb_transfered >= 4)) {
     hid_parse_frame(uhi_hid_dev.report, uhi_hid_dev.report_size);
   }
 
